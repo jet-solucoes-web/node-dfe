@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run build && node test.js",
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cpx \"src/schemas/**/*\" lib/schemas",
     "cxsd": "cxsd",
     "dev": "ts-node-dev --respawn ./src/index.ts"
   },
@@ -37,6 +38,7 @@
     "@types/node": "^12.11.1",
     "cxsd": "^0.1.1",
     "debug": "^4.1.0",
+    "libxmljs": "^1.0.11",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "request": "^2.88.0",
@@ -45,8 +47,10 @@
     "xml2js": "0.4.19"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.36",
     "@types/request": "^2.48.1",
     "@types/xml2js": "0.4.3",
+    "cpx": "^1.5.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.1.6"
   }
