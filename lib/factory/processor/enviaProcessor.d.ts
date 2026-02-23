@@ -1,4 +1,4 @@
-import { RetornoProcessamentoNF, Configuracoes, NFeBase } from '../interface/nfe';
+import { RetornoProcessamentoNF, Configuracoes, NFeBase } from "../interface/nfe";
 /**
  * Classe para processamento de NFe/NFCe
  */
@@ -50,6 +50,7 @@ export declare class EnviaProcessor {
     private getDetalhamentoPagamentos;
     private getDetalhamentoCartao;
     private getInfoAdic;
+    private getInfoIntermed;
     private getResponsavelTecnico;
     private gerarHashCSRT;
 }
