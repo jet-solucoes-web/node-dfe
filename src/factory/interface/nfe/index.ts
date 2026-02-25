@@ -102,7 +102,7 @@ export interface DetalhesProduto {
   codigo: string;
   cEAN: string;
   descricao: string;
-  cest: string;
+  cest?: string;
   NCM: string;
   CFOP: string;
   unidadeComercial: string;

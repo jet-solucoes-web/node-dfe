@@ -559,7 +559,7 @@ export interface TNFeInfNFeDetProd {
   xProd: string;
   NCM: string;
   nVE: string[];
-  CEST: string;
+  CEST?: string;
   indEscala: TNFeInfNFeDetProdIndEscala;
   indEscalaSpecified: boolean;
   cNPJFab: string;
