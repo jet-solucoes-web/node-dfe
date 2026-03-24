@@ -1,6 +1,6 @@
-import { RetornoProcessamentoNF, NFCeDocumento, NFeDocumento, Configuracoes } from '../interface/nfe';
-import { Inutilizar } from '../interface/inutilizacao';
-import { Evento } from '../interface';
+import { RetornoProcessamentoNF, NFCeDocumento, NFeDocumento, Configuracoes } from "../interface/nfe";
+import { Inutilizar } from "../interface/inutilizacao";
+import { Evento } from "../interface";
 /**
  * Classe para processamento de NFe/NFCe
  */

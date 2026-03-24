@@ -38,6 +38,8 @@ export interface NFeBase {
     total: Total;
     transporte: Transporte;
     infoAdicional: InfoAdicional;
+    infoIntermediador?: InfoIntermediador;
+    autXML?: InfoAutXML[];
 }
 export interface NFeDocumento extends NFeBase {
     cobranca: Cobranca;
@@ -62,13 +64,21 @@ export interface DocumentoFiscal {
     tipoEmissao: string;
     finalidadeEmissao: string;
     indPresenca: string;
+    indIntermed?: string;
     indConsumidorFinal: string;
     processoEmissao: string;
     versaoAplicativoEmissao: string;
-    dhContingencia: string;
-    justificativaContingencia: string;
-    isContingenciaOffline: boolean;
-    indIntermed?: string;
+    dhContingencia?: string;
+    justificativaContingencia?: string;
+    isContingenciaOffline?: boolean;
+}
+export interface InfoIntermediador {
+    CNPJ: string;
+    idCadIntTran: string;
+}
+export interface InfoAutXML {
+    CNPJ?: string;
+    CPF?: string;
 }
 export interface Produto {
     prod: DetalhesProduto;
@@ -80,7 +90,7 @@ export interface DetalhesProduto {
     codigo: string;
     cEAN: string;
     descricao: string;
-    cest: string;
+    cest?: string;
     NCM: string;
     CFOP: string;
     unidadeComercial: string;
@@ -91,18 +101,18 @@ export interface DetalhesProduto {
     unidadeTributavel: string;
     quantidadeTributavel: string;
     valorUnitarioTributavel: string;
-    valorFrete: string;
-    valorSeguro: string;
-    valorDesconto: string;
-    valorOutro: string;
+    valorFrete?: string;
+    valorSeguro?: string;
+    valorDesconto?: string;
+    valorOutro?: string;
     indicadorTotal: string;
     numeroPedido: string;
     numeroItemPedido: string;
-    cNPJFab: string;
-    cBenef: string;
-    eXTIPI: string;
-    percentualDevolucao: number;
-    valorIPIDevolucao: number;
+    cNPJFab?: string;
+    cBenef?: string;
+    eXTIPI?: string;
+    percentualDevolucao?: number;
+    valorIPIDevolucao?: number;
 }
 export interface impostoDevol {
     pDevol: number;
@@ -110,78 +120,99 @@ export interface impostoDevol {
 }
 export interface Imposto {
     valorAproximadoTributos: string;
-    icms: Icms;
-    pis: Pis;
-    cofins: Cofins;
-    ipi: Ipi;
-    ii: II;
-    issqn: Issqn;
-    pisst: PisST;
-    cofinsst: CofinsST;
-    icmsUfDest: IcmsUfDest;
+    icms?: Icms;
+    pis?: Pis;
+    cofins?: Cofins;
+    ipi?: Ipi;
+    ii?: II;
+    issqn?: Issqn;
+    pisst?: PisST;
+    cofinsst?: CofinsST;
+    icmsUfDest?: IcmsUfDest;
+    IBSCBS?: IBSCBS;
 }
 export interface Icms {
     orig: string;
-    CST: string;
-    modBC: string;
-    pRedBC: string;
-    vBC: string;
-    pICMS: string;
-    vICMS: string;
-    modBCST: string;
-    pMVAST: string;
-    pRedBCST: string;
-    vBCST: string;
-    pICMSST: string;
-    vICMSST: string;
-    vBCSTRet: string;
-    vICMSSTRet: string;
-    vBCSTDest: string;
-    vICMSSTDest: string;
-    motDesICMS: string;
-    pBCOp: string;
-    UFST: string;
-    CSOSN: string;
-    pCredSN: string;
-    vCredICMSSN: string;
-    vICMSDeson: string;
-    vICMSOp: string;
-    pDif: string;
-    vICMSDif: string;
-    vBCFCP: string;
-    pFCP: string;
-    vFCP: string;
-    vBCFCPST: string;
-    pFCPST: string;
-    vFCPST: string;
-    vBCFCPSTRet: string;
-    pFCPSTRet: string;
-    vFCPSTRet: string;
-    pST: string;
-    pICMSEfet: string;
-    pRedBCEfet: string;
-    vBCEfet: string;
-    vICMSEfet: string;
+    CST?: string;
+    modBC?: string;
+    pRedBC?: string;
+    vBC?: string;
+    pICMS?: string;
+    vICMS?: string;
+    modBCST?: string;
+    pMVAST?: string;
+    pRedBCST?: string;
+    vBCST?: string;
+    pICMSST?: string;
+    vICMSST?: string;
+    vBCSTRet?: string;
+    vICMSSTRet?: string;
+    vBCSTDest?: string;
+    vICMSSTDest?: string;
+    motDesICMS?: string;
+    pBCOp?: string;
+    UFST?: string;
+    CSOSN?: string;
+    pCredSN?: string;
+    vCredICMSSN?: string;
+    vICMSDeson?: string;
+    vICMSOp?: string;
+    pDif?: string;
+    vICMSDif?: string;
+    vBCFCP?: string;
+    pFCP?: string;
+    vFCP?: string;
+    vBCFCPST?: string;
+    pFCPST?: string;
+    vFCPST?: string;
+    vBCFCPSTRet?: string;
+    pFCPSTRet?: string;
+    vFCPSTRet?: string;
+    pST?: string;
+    pICMSEfet?: string;
+    pRedBCEfet?: string;
+    vBCEfet?: string;
+    vICMSEfet?: string;
 }
 export interface IcmsUfDest {
     vBCUFDest: number;
-    vBCFCPUFDest: number;
+    vBCFCPUFDest?: number;
     pFCPUFDest: number;
-    pICMSUFDest: number;
+    pICMSUFDest?: number;
     pICMSInter: number;
     pICMSInterPart: number;
-    vFCPUFDest: number;
-    vICMSUFDest: number;
+    vFCPUFDest?: number;
+    vICMSUFDest?: number;
     vICMSUFRemet: number;
+}
+export interface IBSCBS {
+    CST: string;
+    cClassTrib: string;
+    gIBSCBS: {
+        vBC: string;
+        gIBSUF?: {
+            pIBSUF: string;
+            vIBSUF: string;
+        };
+        gIBSMun?: {
+            pIBSMun: string;
+            vIBSMun: string;
+        };
+        vIBS: string;
+        gCBS?: {
+            pCBS: string;
+            vCBS: string;
+        };
+    };
 }
 export interface Pis {
     CST: string;
-    vBC: number;
-    pPIS: number;
-    vPIS: number;
-    vBCProd: number;
-    vAliqProd: number;
-    qBCProd: number;
+    vBC?: string;
+    pPIS?: string;
+    vPIS?: string;
+    vBCProd?: string;
+    vAliqProd?: string;
+    qBCProd?: string;
 }
 export interface PisST {
     vBC: number;
@@ -199,23 +230,23 @@ export interface CofinsST {
 }
 export interface Cofins {
     CST: string;
-    vBC: number;
-    pCOFINS: number;
-    vCOFINS: number;
-    qBCProd: number;
-    vAliqProd: number;
+    vBC?: string;
+    pCOFINS?: string;
+    vCOFINS?: string;
+    qBCProd?: string;
+    vAliqProd?: string;
 }
 export interface Ipi {
     cEnq: string;
     CST: string;
-    vBC: number;
-    qUnid: number;
-    vUnid: number;
-    pIPI: number;
-    vIPI: number;
-    CNPJProd: string;
-    cSelo: string;
-    qSelo: string;
+    vBC?: string;
+    qUnid?: string;
+    vUnid?: string;
+    pIPI?: string;
+    vIPI?: string;
+    CNPJProd?: string;
+    cSelo?: string;
+    qSelo?: string;
 }
 export interface II {
     vBC: number;
@@ -243,16 +274,17 @@ export interface Issqn {
 }
 export interface Total {
     icmsTot: IcmsTot;
-    issqnTot: IssqnTot;
-    retTrib: RetTrib;
+    issqnTot?: IssqnTot;
+    retTrib?: RetTrib;
+    IBSCBSTot?: IBSCBSTot;
 }
 export interface IcmsTot {
     vBC: string;
     vICMS: string;
     vICMSDeson: string;
-    vFCPUFDest: string;
-    vICMSUFDest: string;
-    vICMSUFRemet: string;
+    vFCPUFDest?: string;
+    vICMSUFDest?: string;
+    vICMSUFRemet?: string;
     vFCP: string;
     vBCST: string;
     vST: string;
@@ -270,6 +302,39 @@ export interface IcmsTot {
     vOutro: string;
     vNF: string;
     vTotTrib: string;
+}
+export interface IBSCBSTot {
+    vBCIBSCBS: string;
+    gIBS: {
+        gIBSUF?: {
+            vDif: string;
+            vDevTrib: string;
+            vIBSUF: string;
+        };
+        gIBSMun?: {
+            vDif: string;
+            vDevTrib: string;
+            vIBSMun: string;
+        };
+        vIBS: string;
+        vCredPres: string;
+        vCredPresCondSus: string;
+    };
+    gCBS?: {
+        vDif: string;
+        vDevTrib: string;
+        vCBS: string;
+        vCredPres: string;
+        vCredPresCondSus: string;
+    };
+    gMono?: {
+        vIBSMono: string;
+        vCBSMono: string;
+        vIBSMonoReten: string;
+        vCBSMonoReten: string;
+        vIBSMonoRet: string;
+        vCBSMonoRet: string;
+    };
 }
 export interface IssqnTot {
     vServ: string;
@@ -296,7 +361,7 @@ export interface RetTrib {
 }
 export interface Transporte {
     modalidateFrete: string;
-    transporta: TNFeInfNFeTranspTransporta;
+    transporta?: TNFeInfNFeTranspTransporta;
 }
 export interface Cobranca {
     fatura: Fatura;
@@ -314,15 +379,15 @@ export interface Duplicata {
     vDuplicatata: Number;
 }
 export interface Pagamento {
-    valorTroco: string;
+    valorTroco?: string;
     pagamentos: DetalhePagamento[];
 }
 export interface DetalhePagamento {
     indicadorFormaPagamento: string;
     formaPagamento: string;
     valor: string;
-    dadosCartao: DetalhePgtoCartao;
-    descricaoFormaPagamento: string;
+    dadosCartao?: DetalhePgtoCartao;
+    descricaoFormaPagamento?: string;
 }
 export interface DetalhePgtoCartao {
     tipoIntegracao: string;
@@ -347,9 +412,9 @@ export interface Empresa {
     razaoSocial: string;
     nomeFantasia: string;
     inscricaoEstadual: string;
-    inscricaoEstadualST: string;
+    inscricaoEstadualST?: string;
     inscricaoMunicipal: string;
-    CNAE: string;
+    CNAE?: string;
     codRegimeTributario: string;
     endereco: Endereco;
     certificado: Certificado;
@@ -370,10 +435,10 @@ export interface Destinatario {
     endereco: Endereco;
     indicadorIEDestinario: string;
     email: string;
-    inscricaoEstadual: string;
-    inscricaoMunicipal: string;
-    inscricaoSuframa: string;
-    isEstrangeiro: boolean;
+    inscricaoEstadual?: string;
+    inscricaoMunicipal?: string;
+    inscricaoSuframa?: string;
+    isEstrangeiro?: boolean;
 }
 export interface Endereco {
     logradouro: string;
@@ -387,7 +452,7 @@ export interface Endereco {
     cep: string;
     codPais: string;
     pais: string;
-    telefone: string;
+    telefone?: string;
 }
 export interface Certificado {
     key: any;

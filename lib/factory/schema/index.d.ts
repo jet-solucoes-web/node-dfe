@@ -95,7 +95,7 @@ export interface TNFeInfNFe {
     dest: TNFeInfNFeDest;
     retirada: TLocal;
     entrega: TLocal;
-    autXML: TNFeInfNFeAutXML[];
+    autXML?: TNFeInfNFeAutXML[];
     det: TNFeInfNFeDet[];
     total: TNFeInfNFeTotal;
     transp: TNFeInfNFeTransp;
@@ -106,6 +106,7 @@ export interface TNFeInfNFe {
     compra: TNFeInfNFeCompra;
     cana: TNFeInfNFeCana;
     infRespTec: TInfRespTec;
+    infIntermed?: TInfIntermed;
 }
 export interface TNFeInfNFeIde {
     cUF: TCodUfIBGE;
@@ -281,7 +282,7 @@ export interface TEnderEmi {
     cPaisSpecified: boolean;
     xPais: TEnderEmiXPais;
     xPaisSpecified: boolean;
-    fone: string;
+    fone?: string;
 }
 export declare enum TUfEmi {
     AC = "AC",
@@ -344,9 +345,9 @@ export interface TNFeInfNFeDest {
     xNome: string;
     enderDest: TEndereco;
     indIEDest: TNFeInfNFeDestIndIEDest;
-    IE: string;
-    ISUF: string;
-    IM: string;
+    IE?: string;
+    ISUF?: string;
+    IM?: string;
     email: string;
 }
 export declare enum ItemChoiceType3 {
@@ -425,8 +426,8 @@ export declare enum ItemChoiceType4 {
     CPF = 1
 }
 export interface TNFeInfNFeAutXML {
-    item: string;
-    itemElementName: ItemChoiceType5;
+    CNPJ?: string;
+    CPF?: string;
 }
 export declare enum ItemChoiceType5 {
     CNPJ = 0,
@@ -447,7 +448,7 @@ export interface TNFeInfNFeDetProd {
     xProd: string;
     NCM: string;
     nVE: string[];
-    CEST: string;
+    CEST?: string;
     indEscala: TNFeInfNFeDetProdIndEscala;
     indEscalaSpecified: boolean;
     cNPJFab: string;
@@ -462,9 +463,9 @@ export interface TNFeInfNFeDetProd {
     uTrib: string;
     qTrib: string;
     vUnTrib: string;
-    vFrete: string;
+    vFrete?: string;
     vSeg: string;
-    vDesc: string;
+    vDesc?: string;
     vOutro: string;
     indTot: TNFeInfNFeDetProdIndTot;
     di: TNFeInfNFeDetProdDI[];
@@ -656,6 +657,7 @@ export interface TNFeInfNFeDetImposto {
     IPI: any;
     ISSQN: any;
     ICMSUFDest: any;
+    IBSCBS: any;
 }
 export interface TNFeInfNFeDetImpostoICMS {
     item: object;
@@ -1136,6 +1138,7 @@ export interface TIpi {
     cSelo: string;
     qSelo: string;
     cEnq: string;
+    IPINT: TIpiIPINT;
     IPITrib: TIpiIPITrib;
     item: object;
 }
@@ -1156,11 +1159,11 @@ export declare enum TIpiIPINTCST {
 }
 export interface TIpiIPITrib {
     CST: TIpiIPITribCST;
-    vBC: number;
-    pIPI: number;
-    vIPI: number;
-    qUnid: number;
-    vUnid: number;
+    vBC: string;
+    pIPI: string;
+    vIPI: string;
+    qUnid: string;
+    vUnid: string;
 }
 export declare enum TIpiIPITribCST {
     Item00 = "00",
@@ -1408,12 +1411,12 @@ export declare enum TNFeInfNFeDetImpostoISSQNIndIncentivo {
 }
 export interface TNFeInfNFeDetImpostoPIS {
     CST: string;
-    vBC: number;
-    pPIS: number;
-    vPIS: number;
-    vBCProd: number;
-    qBCProd: number;
-    vAliqProd: number;
+    vBC: string;
+    pPIS: string;
+    vPIS: string;
+    vBCProd: string;
+    qBCProd: string;
+    vAliqProd: string;
 }
 export interface TNFeInfNFeDetImpostoPISPISAliq {
     CST: TNFeInfNFeDetImpostoPISPISAliqCST;
@@ -1498,11 +1501,11 @@ export declare enum ItemsChoiceType2 {
 }
 export interface TNFeInfNFeDetImpostoCOFINS {
     CST: string;
-    vBC: number;
-    pCOFINS: number;
-    vCOFINS: number;
-    qBCProd: number;
-    vAliqProd: number;
+    vBC: string;
+    pCOFINS: string;
+    vCOFINS: string;
+    qBCProd: string;
+    vAliqProd: string;
 }
 export interface TNFeInfNFeDetImpostoCOFINSCOFINSAliq {
     CST: TNFeInfNFeDetImpostoCOFINSCOFINSAliqCST;
@@ -1612,6 +1615,7 @@ export interface TNFeInfNFeTotal {
     ICMSTot: TNFeInfNFeTotalICMSTot;
     ISSQNtot: TNFeInfNFeTotalISSQNtot;
     retTrib: TNFeInfNFeTotalRetTrib;
+    IBSCBSTot?: TNFeInfNFeTotalIBSCBSTot;
 }
 export interface TNFeInfNFeTotalICMSTot {
     vBC: string;
@@ -1670,6 +1674,39 @@ export interface TNFeInfNFeTotalRetTrib {
     vBCRetPrev: string;
     vRetPrev: string;
 }
+export interface TNFeInfNFeTotalIBSCBSTot {
+    vBCIBSCBS: string;
+    gIBS: {
+        gIBSUF?: {
+            vDif: string;
+            vDevTrib: string;
+            vIBSUF: string;
+        };
+        gIBSMun?: {
+            vDif: string;
+            vDevTrib: string;
+            vIBSMun: string;
+        };
+        vIBS: string;
+        vCredPres: string;
+        vCredPresCondSus: string;
+    };
+    gCBS?: {
+        vDif: string;
+        vDevTrib: string;
+        vCBS: string;
+        vCredPres: string;
+        vCredPresCondSus: string;
+    };
+    gMono?: {
+        vIBSMono: string;
+        vCBSMono: string;
+        vIBSMonoReten: string;
+        vCBSMonoReten: string;
+        vIBSMonoRet: string;
+        vCBSMonoRet: string;
+    };
+}
 export interface TNFeInfNFeTransp {
     modFrete: TNFeInfNFeTranspModFrete;
     transporta: TNFeInfNFeTranspTransporta;
@@ -1688,14 +1725,14 @@ export declare enum TNFeInfNFeTranspModFrete {
 }
 export interface TNFeInfNFeTranspTransporta {
     CNPJ: string;
-    item: string;
-    itemElementName: ItemChoiceType6;
+    item?: string;
+    itemElementName?: ItemChoiceType6;
     xNome: string;
-    IE: string;
-    xEnder: string;
-    xMun: string;
-    UF: TUf;
-    ufSpecified: boolean;
+    IE?: string;
+    xEnder?: string;
+    xMun?: string;
+    UF?: TUf;
+    ufSpecified?: boolean;
 }
 export declare enum ItemChoiceType6 {
     CNPJ = 0,
@@ -1749,7 +1786,7 @@ export interface TNFeInfNFeCobrDup {
 }
 export interface TNFeInfNFePag {
     detPag: TNFeInfNFePagDetPag[];
-    vTroco: string;
+    vTroco?: string;
 }
 export interface TNFeInfNFePagDetPag {
     indPag: TNFeInfNFePagDetPagIndPag;
@@ -1779,6 +1816,7 @@ export declare enum TNFeInfNFePagDetPagTPag {
     Item17 = "17",
     Item18 = "18",
     Item19 = "19",
+    Item20 = "20",
     Item90 = "90",
     Item99 = "99"
 }
@@ -1811,6 +1849,10 @@ export interface TNFeInfNFeInfAdic {
     obsCont: TNFeInfNFeInfAdicObsCont[];
     obsFisco: TNFeInfNFeInfAdicObsFisco[];
     procRef: TNFeInfNFeInfAdicProcRef[];
+}
+export interface TNFeInfNFeInfIntermed {
+    CNPJ: string;
+    idCadIntTran: string;
 }
 export interface TNFeInfNFeInfAdicObsCont {
     xTexto: string;
@@ -1868,6 +1910,10 @@ export interface TInfRespTec {
     fone: string;
     idCSRT: string;
     hashCSRT: string;
+}
+export interface TInfIntermed {
+    CNPJ: string;
+    idCadIntTran: string;
 }
 export interface TNFeInfNFeSupl {
     qrCode: string;

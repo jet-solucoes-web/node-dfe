@@ -1,4 +1,4 @@
-import { RetornoProcessamentoNF, Empresa, NFCeDocumento, NFeDocumento, ResponsavelTecnico } from '../interface/nfe';
+import { RetornoProcessamentoNF, Empresa, NFCeDocumento, NFeDocumento, ResponsavelTecnico } from "../interface/nfe";
 import { WebProxy } from "../webservices/webserviceHelper";
 /**
  * Classe para processamento de NFe/NFCe
