@@ -630,9 +630,9 @@ export class EnviaProcessor {
       enderEmit: this.getEnderEmit(empresa.endereco),
       IE: empresa.inscricaoEstadual,
       IM: empresa.inscricaoMunicipal,
+      CNAE: empresa.CNAE,
       CRT: empresa.codRegimeTributario,
       iEST: empresa.inscricaoEstadualST,
-      CNAE: empresa.CNAE,
     };
   }
 
