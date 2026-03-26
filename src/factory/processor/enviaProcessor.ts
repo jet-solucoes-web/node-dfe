@@ -124,7 +124,12 @@ export class EnviaProcessor {
       console.log("❌ XML inválido");
       // O xmllint joga os erros no stderr
       const errorMessage = error.stderr.toString();
-      return { isValid: false, xmlErrors: [errorMessage] };
+      return {
+        isValid: false,
+        xmlErrors: errorMessage
+          ?.split("\n")
+          ?.filter((line: string) => line.trim() !== ""),
+      };
     } finally {
       if (fs.existsSync(tempXmlPath)) fs.unlinkSync(tempXmlPath);
     }
@@ -171,10 +176,9 @@ export class EnviaProcessor {
 
         console.log(xmlErrors, "xmlErrors");
 
-        xmlErrors?.forEach((erro) => {
-          result.xmlErrors.push(erro.message);
-          console.log(erro.message);
-        });
+        if (xmlErrors && xmlErrors.length > 0) {
+          result.xmlErrors = xmlErrors;
+        }
 
         return result;
       }
