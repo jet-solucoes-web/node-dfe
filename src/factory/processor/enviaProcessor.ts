@@ -45,7 +45,7 @@ import { SefazNFCe } from "../webservices/sefazNfce";
 import { SefazNFe } from "../webservices/sefazNfe";
 import * as fs from "fs";
 import * as path from "path";
-import * as libxmljs from "libxmljs";
+const { execSync } = require("child_process");
 
 const sha1 = require("sha1");
 
@@ -108,6 +108,28 @@ export class EnviaProcessor {
     }
   }
 
+  private async validateXML(xmlString: string, xsdPath: string) {
+    // Salva o XML temporariamente para o xmllint ler
+    const tempXmlPath = path.join(__dirname, "temp_nfe.xml");
+    fs.writeFileSync(tempXmlPath, xmlString);
+
+    try {
+      // Chama o binário do sistema operacional
+      execSync(`xmllint --noout --schema ${xsdPath} ${tempXmlPath}`, {
+        stdio: "pipe",
+      });
+      console.log("✅ XML válido");
+      return { isValid: true };
+    } catch (error) {
+      console.log("❌ XML inválido");
+      // O xmllint joga os erros no stderr
+      const errorMessage = error.stderr.toString();
+      return { isValid: false, xmlErrors: [errorMessage] };
+    } finally {
+      if (fs.existsSync(tempXmlPath)) fs.unlinkSync(tempXmlPath);
+    }
+  }
+
   /**
    * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65
    * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
@@ -137,17 +159,9 @@ export class EnviaProcessor {
       const schemasDir = path.join(libRoot, "schemas", "PL_010_V1.30");
 
       const xmlString = xmlAssinado;
-      const xsdString = fs.readFileSync(
-        path.join(schemasDir, "nfe_v4.00.xsd"),
-        "utf8",
-      );
+      const xsdPath = path.join(schemasDir, "nfe_v4.00.xsd");
 
-      const xmlDoc = libxmljs.parseXml(xmlString);
-      const xsdDoc = libxmljs.parseXml(xsdString, {
-        baseUrl: schemasDir + path.sep,
-      });
-
-      const isValid = xmlDoc.validate(xsdDoc);
+      const { isValid, xmlErrors } = await this.validateXML(xmlString, xsdPath);
 
       if (isValid) {
         console.log("✅ XML válido");
@@ -155,7 +169,9 @@ export class EnviaProcessor {
         console.log("❌ XML inválido");
         result.xmlErrors = [];
 
-        xmlDoc.validationErrors.forEach((erro) => {
+        console.log(xmlErrors, "xmlErrors");
+
+        xmlErrors?.forEach((erro) => {
           result.xmlErrors.push(erro.message);
           console.log(erro.message);
         });
