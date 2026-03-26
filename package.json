@@ -36,7 +36,6 @@
   "homepage": "https://github.com/lealhugui/node-dfe#readme",
   "dependencies": {
     "@types/node": "^12.11.1",
-    "cxsd": "^0.1.1",
     "debug": "^4.1.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
@@ -50,6 +49,7 @@
     "@types/request": "^2.48.1",
     "@types/xml2js": "0.4.3",
     "cpx": "^1.5.0",
+    "cxsd": "^0.1.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.1.6"
   }
