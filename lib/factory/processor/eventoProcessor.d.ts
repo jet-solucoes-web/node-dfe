@@ -7,6 +7,9 @@ export declare class EventoProcessor {
     private configuracoes;
     constructor(configuracoes: Configuracoes);
     executar(evento: Evento): Promise<RetornoProcessamento>;
+    private isManifestacaoDestinatario;
+    private getAutorizadorEvento;
+    private getSefazCliente;
     private transmitirXml;
     private getInfEvento;
     private getDetEvento;

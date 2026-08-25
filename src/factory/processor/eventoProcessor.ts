@@ -39,6 +39,8 @@ export class EventoProcessor {
             success: false
         };
 
+        evento.detEvento = evento.detEvento || <DetalheEvento>{};
+
         switch (evento.tpEvento) {
             case '110111':
                 evento.detEvento.descEvento = 'Cancelamento';
@@ -65,24 +67,26 @@ export class EventoProcessor {
         }
 
         try {
-            const { geral: { modelo, ambiente }, empresa, arquivos } = this.configuracoes
-            const Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
+            const { geral: { ambiente }, empresa, arquivos } = this.configuracoes
+            const Sefaz = this.getSefazCliente(evento.tpEvento);
+            const autorizador = this.getAutorizadorEvento(evento.tpEvento, empresa.endereco.uf);
 
-            soapEvento = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.evento);
+            soapEvento = Sefaz.getSoapInfo(autorizador, ambiente, ServicosSefaz.evento);
 
             const xml = this.gerarXml(evento);
             const xmlAssinado = Signature.signXmlX509(xml, 'infEvento', this.configuracoes.certificado);
 
             let xmlLote = this.gerarXmlLote(xmlAssinado);
 
-            result = await this.transmitirXml(xmlLote);
+            result = await this.transmitirXml(xmlLote, autorizador, evento.tpEvento);
 
             if (arquivos.salvar) {
                 if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
                 if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
                 if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
 
-                if ((result.success == true) && (Object(result.data).retEnvEvento.retEvento.infEvento.cStat == 135)) {
+                const cStat = Object(result.data).retEnvEvento.retEvento.infEvento.cStat;
+                if ((result.success == true) && (cStat == 135 || cStat == 136 || cStat == '135' || cStat == '136')) {
                     const filename = `${arquivos.pastaXML}${evento.chNFe}${evento.tpEvento}-procEventoNFe.xml`;
 
                     const procEvento = <schema.TProcEvento>{
@@ -112,11 +116,24 @@ export class EventoProcessor {
         return result;
     }
 
-    private async transmitirXml(xml: string) {
-        const { geral: { modelo, ambiente }, empresa, certificado, webProxy } = this.configuracoes;
+    private isManifestacaoDestinatario(tpEvento: string) {
+        return ['210200', '210210', '210220', '210240'].includes(tpEvento);
+    }
 
-        const Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
-        const soap = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.evento);
+    private getAutorizadorEvento(tpEvento: string, uf: string) {
+        return this.isManifestacaoDestinatario(tpEvento) ? 'SVAN' : uf;
+    }
+
+    private getSefazCliente(tpEvento: string) {
+        if (this.isManifestacaoDestinatario(tpEvento)) return SefazNFe;
+        return this.configuracoes.geral.modelo == '65' ? SefazNFCe : SefazNFe;
+    }
+
+    private async transmitirXml(xml: string, autorizador: string, tpEvento: string) {
+        const { geral: { ambiente }, certificado, webProxy } = this.configuracoes;
+
+        const Sefaz = this.getSefazCliente(tpEvento);
+        const soap = Sefaz.getSoapInfo(autorizador, ambiente, ServicosSefaz.evento);
         return await WebServiceHelper.makeSoapRequest(xml, certificado, soap, webProxy);
     }
 
@@ -127,7 +144,7 @@ export class EventoProcessor {
 
         return <schema.TEventoInfEvento>{
             $: { Id: _ID },
-            cOrgao: empresa.endereco.cUf,
+            cOrgao: this.isManifestacaoDestinatario(evento.tpEvento) ? schema.TCOrgaoIBGE.Item91 : empresa.endereco.cUf,
             tpAmb: Utils.getEnumByValue(schema.TAmb, ambiente),
             CNPJ: empresa.cnpj,
             chNFe: evento.chNFe,
@@ -161,7 +178,7 @@ export class EventoProcessor {
             result.xJust = evento.detEvento.xJust;
             result.chNFeRef = evento.detEvento.chNFeRef;
         };
-        if (evento.tpEvento == 'manifDestOperNaoRealizada') {
+        if (evento.tpEvento == '210240') {
             result.xJust = evento.detEvento.xJust;
         };
 

@@ -96,7 +96,9 @@ export abstract class WebServiceHelper {
             url: soapParams.url,
             agentOptions: this.buildCertAgentOpt(cert),
             headers: {
-                "Content-Type": soapParams.contentType
+                "Content-Type": soapParams.action
+                    ? `${soapParams.contentType};action="${soapParams.action}"`
+                    : soapParams.contentType
             },
             body: this.buildSoapEnvelope(xml, soapParams.method, raw),
             family: 4 //workaround para erro de dns em versões antigas da glibc
@@ -149,6 +151,8 @@ export abstract class WebServiceHelper {
                 if (retorno) {
                     if(Object(retorno)['soap:Envelope']?.['soap:Body']?.['nfeDistDFeInteresseResponse']) {
                         result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeDistDFeInteresseResponse']['nfeDistDFeInteresseResult'];
+                    } else if (Object(retorno)['soap:Envelope']?.['soap:Body']?.['nfeRecepcaoEventoNFResult']) {
+                        result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeRecepcaoEventoNFResult'];
                     } else if (Object(retorno)['S:Envelope']?.['S:Body']?.['ns2:nfeResultMsg']) {
                         result.data = Object(retorno)['S:Envelope']['S:Body']['ns2:nfeResultMsg'];
                     } else {
