@@ -25,6 +25,7 @@ export declare class EnviaProcessor {
     private gerarNFe;
     private gerarNFCe;
     private getIde;
+    private getNFref;
     private getEmit;
     private getEnderEmit;
     private getEnderDest;

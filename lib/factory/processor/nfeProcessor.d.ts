@@ -33,6 +33,7 @@ export declare class NFeProcessor {
     private gerarNFe;
     private gerarNFCe;
     private getIde;
+    private getNFref;
     private getEmit;
     private getEnderEmit;
     private getEnderDest;

@@ -56,6 +56,25 @@ export interface NFCeDocumento extends NFeBase {
   pagamento: Pagamento;
 }
 
+export interface NFref {
+  refNFe?: string;
+  refNFeSig?: string;
+  refCTe?: string;
+  refNF?: {
+    cUF: string;
+    AAMM: string;
+    CNPJ: string;
+    mod: string;
+    serie: string;
+    nNF: string;
+  };
+  refECF?: {
+    mod: string;
+    nECF: string;
+    nCOO: string;
+  };
+}
+
 export interface DocumentoFiscal {
   serie: string;
   modelo: string;
@@ -79,6 +98,7 @@ export interface DocumentoFiscal {
   dhContingencia?: string;
   justificativaContingencia?: string;
   isContingenciaOffline?: boolean;
+  nFref?: NFref[];
 }
 
 export interface InfoIntermediador {

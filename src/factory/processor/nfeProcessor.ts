@@ -5,6 +5,7 @@ import {
   NFCeDocumento,
   NFeDocumento,
   DocumentoFiscal,
+  NFref,
   Destinatario,
   Transporte,
   Volume,
@@ -645,10 +646,32 @@ export class NFeProcessor {
       verProc: documento.versaoAplicativoEmissao,
       dhCont: documento.dhContingencia,
       xJust: documento.justificativaContingencia,
-      //nFref: schema.TNFeInfNFeIdeNFref[],
     };
 
+    if (documento.nFref?.length) {
+      (ide as any).NFref = documento.nFref.map((ref) => this.getNFref(ref));
+    }
+
     return ide;
+  }
+
+  private getNFref(ref: NFref) {
+    const nFref: any = {};
+    if (ref.refNFe) nFref.refNFe = ref.refNFe;
+    if (ref.refNFeSig) nFref.refNFeSig = ref.refNFeSig;
+    if (ref.refCTe) nFref.refCTe = ref.refCTe;
+    if (ref.refNF) {
+      nFref.refNF = {
+        cUF: ref.refNF.cUF,
+        AAMM: ref.refNF.AAMM,
+        CNPJ: ref.refNF.CNPJ,
+        mod: ref.refNF.mod,
+        serie: ref.refNF.serie,
+        nNF: ref.refNF.nNF,
+      };
+    }
+    if (ref.refECF) nFref.refECF = ref.refECF;
+    return nFref;
   }
 
   private getEmit(empresa: Empresa) {
@@ -1629,12 +1652,10 @@ export class NFeProcessor {
     return result;
   }
   private getImpostoDevolucao(devol: impostoDevol) {
-    return {
-      impostoDevol: <schema.TNFeInfNFeDetImpostoDevol>{
-        pDevol: devol.pDevol,
-        IPI: {
-          vIPIDevol: devol.vIPIDevol,
-        },
+    return <schema.TNFeInfNFeDetImpostoDevol>{
+      pDevol: devol.pDevol,
+      IPI: {
+        vIPIDevol: devol.vIPIDevol,
       },
     };
   }
