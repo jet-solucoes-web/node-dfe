@@ -45,6 +45,7 @@ export declare class EnviaProcessor {
     private getTotal;
     private getIcmsTot;
     private getTransp;
+    private getVolume;
     private getCobr;
     private getDetalheCobranca;
     private getPag;

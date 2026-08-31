@@ -53,6 +53,7 @@ export declare class NFeProcessor {
     private getTotal;
     private getIcmsTot;
     private getTransp;
+    private getVolume;
     private getPag;
     private getDetalhamentoPagamentos;
     private getDetalhamentoCartao;

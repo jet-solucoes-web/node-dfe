@@ -359,9 +359,21 @@ export interface RetTrib {
     vBCRetPrev: string;
     vRetPrev: string;
 }
+export interface Volume {
+    qVol?: string;
+    esp?: string;
+    marca?: string;
+    nVol?: string;
+    pesoL?: string;
+    pesoB?: string;
+    lacres?: {
+        nLacre: string;
+    }[];
+}
 export interface Transporte {
     modalidateFrete: string;
     transporta?: TNFeInfNFeTranspTransporta;
+    vol?: Volume[];
 }
 export interface Cobranca {
     fatura: Fatura;

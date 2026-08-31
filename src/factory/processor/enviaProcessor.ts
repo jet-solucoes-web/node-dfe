@@ -7,6 +7,7 @@ import {
   DocumentoFiscal,
   Destinatario,
   Transporte,
+  Volume,
   Pagamento,
   Produto,
   Total,
@@ -1649,21 +1650,39 @@ export class EnviaProcessor {
   }
 
   private getTransp(transp: Transporte) {
-    return <schema.TNFeInfNFeTransp>{
+    const result = <schema.TNFeInfNFeTransp>{
       modFrete: transp.modalidateFrete,
       transporta: transp.transporta,
-      /**
-             * transporta: TNFeInfNFeTranspTransporta;
-                retTransp: TNFeInfNFeTranspRetTransp;
-                //balsa
-                //reboque
-                //vagao
-                //veicTransp
-                items: object[];
-                itemsElementName: ItemsChoiceType5[];
-                vol: TNFeInfNFeTranspVol[];
-            */
     };
+
+    const volumes = Array.isArray(transp.vol)
+      ? transp.vol
+      : transp.vol
+        ? [transp.vol as Volume]
+        : [];
+
+    if (volumes.length > 0) {
+      result.vol = volumes.map((v) => this.getVolume(v));
+    }
+
+    return result;
+  }
+
+  private getVolume(vol: Volume) {
+    const result = <schema.TNFeInfNFeTranspVol>{};
+    if (vol.qVol != null && vol.qVol !== "") result.qVol = String(vol.qVol);
+    if (vol.esp) result.esp = vol.esp;
+    if (vol.marca) result.marca = vol.marca;
+    if (vol.nVol) result.nVol = vol.nVol;
+    if (vol.pesoL != null && vol.pesoL !== "") result.pesoL = String(vol.pesoL);
+    if (vol.pesoB != null && vol.pesoB !== "") result.pesoB = String(vol.pesoB);
+    if (vol.lacres && vol.lacres.length > 0) {
+      const lacres = vol.lacres
+        .filter((l) => l && l.nLacre)
+        .map((l) => ({ nLacre: l.nLacre }));
+      if (lacres.length > 0) result.lacres = lacres;
+    }
+    return result;
   }
 
   private getCobr(cobranca: Cobranca) {
